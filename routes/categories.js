@@ -6,6 +6,6 @@ const {
 } = require("../controllers/categoryController");
 const { requireSignin } = require("../middleware/auth");
 
-router.get("/", [requireSignin], allCategories);
+router.get("/", [], allCategories);
 
 module.exports = router;

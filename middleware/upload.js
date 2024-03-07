@@ -5,7 +5,9 @@ module.exports = (req, res, next) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    req.body = fields;
+    for (let key in fields) {
+      req.body[key] = fields[key][0];
+    }
     if (err)
       return res.status(400).json({
         error: "Images could not uploaded !",

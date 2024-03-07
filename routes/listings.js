@@ -3,6 +3,8 @@ const router = express.Router();
 const {
   createListing,
   getAllListings,
+  listingById,
+  listingImage,
 } = require("../controllers/listingController");
 const { requireSignin } = require("../middleware/auth");
 const validateWith = require("../middleware/validation");
@@ -13,14 +15,15 @@ const schema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().allow(""),
   price: Joi.number().required().min(1),
-  categoryId: Joi.string().required(),
-  location: Joi.object({
-    latitude: Joi.number().required(),
-    longitude: Joi.number().required(),
-  }).optional(),
+  category: Joi.string().optional().allow(null),
+  location: Joi.string().optional(),
+  images: Joi.array().required(),
 });
 
 router.post("/", [upload, validateWith(schema)], createListing);
 router.get("/", [], getAllListings);
+router.get("/image/:listingId/:index", listingImage);
+
+router.param("listingId", listingById);
 
 module.exports = router;
