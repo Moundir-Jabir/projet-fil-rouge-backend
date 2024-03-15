@@ -1,7 +1,7 @@
 const Listing = require("../models/listing");
 
 exports.createListing = (req, res) => {
-  req.body.user = "65e1151b37520aed8faf8ea5";
+  req.body.user = req.auth._id;
   req.body.location = JSON.parse(req.body.location);
   const newListing = new Listing(req.body);
   newListing

@@ -7,6 +7,7 @@ require("dotenv").config();
 const categoryRouter = require("./routes/categories");
 const authRouter = require("./routes/auth");
 const listingRouter = require("./routes/listings");
+const userRouter = require("./routes/users");
 
 const mongoose = require("mongoose");
 mongoose
@@ -20,6 +21,7 @@ app.use(cors());
 app.use("/api/category", categoryRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listings", listingRouter);
+app.use("/api/user", userRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

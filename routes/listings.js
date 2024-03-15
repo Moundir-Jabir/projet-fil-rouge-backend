@@ -20,8 +20,8 @@ const schema = Joi.object({
   images: Joi.array().required(),
 });
 
-router.post("/", [upload, validateWith(schema)], createListing);
-router.get("/", [], getAllListings);
+router.post("/", [requireSignin, upload, validateWith(schema)], createListing);
+router.get("/", [requireSignin], getAllListings);
 router.get("/image/:listingId/:index", listingImage);
 
 router.param("listingId", listingById);
