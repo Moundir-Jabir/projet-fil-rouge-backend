@@ -5,6 +5,7 @@ const {
   getAllListings,
   listingById,
   listingImage,
+  getListingById,
 } = require("../controllers/listingController");
 const { requireSignin } = require("../middleware/auth");
 const validateWith = require("../middleware/validation");
@@ -22,6 +23,7 @@ const schema = Joi.object({
 
 router.post("/", [requireSignin, upload, validateWith(schema)], createListing);
 router.get("/", [requireSignin], getAllListings);
+router.get("/:listingId", [requireSignin], getListingById);
 router.get("/image/:listingId/:index", listingImage);
 
 router.param("listingId", listingById);

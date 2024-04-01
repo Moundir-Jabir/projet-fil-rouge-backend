@@ -15,9 +15,7 @@ exports.createListing = (req, res) => {
 
 exports.getAllListings = async (req, res) => {
   try {
-    const listings = await Listing.find()
-      .select("-images")
-      .populate(["category", "user"]);
+    const listings = await Listing.find().select("-images");
     return res.json(listings);
   } catch (error) {
     return res.status(500).json({
@@ -26,9 +24,14 @@ exports.getAllListings = async (req, res) => {
   }
 };
 
+exports.getListingById = (req, res) => {
+  return res.send(req.listing);
+};
+
 exports.listingById = (req, res, next, listingId) => {
   Listing.findById(listingId)
-    .populate(["category", "user"])
+    .select("-images")
+    .populate(["category", { path: "user", select: "-image" }])
     .then((listing) => {
       if (!listing)
         return res.status(404).json({
@@ -41,9 +44,18 @@ exports.listingById = (req, res, next, listingId) => {
 };
 
 exports.listingImage = (req, res) => {
-  const { data, contentType } = req.listing.images[req.params.index];
-  if (data) {
-    res.set("Content-Type", contentType);
-    return res.send(data);
-  }
+  Listing.findById(req.params.listingId)
+    .slice("images", [Number(req.params.index), 1])
+    .then((listing) => {
+      if (!listing)
+        return res.status(404).json({
+          erreur: "Listing not found",
+        });
+      const { data, contentType } = listing.images[0];
+      if (data) {
+        res.set("Content-Type", contentType);
+        return res.send(data);
+      }
+    })
+    .catch((error) => res.status(400).json({ error }));
 };

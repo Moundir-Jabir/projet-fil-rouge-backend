@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v1 } = require("uuid");
+const { type } = require("os");
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,6 +26,10 @@ const userSchema = new mongoose.Schema(
     image: {
       data: Buffer,
       contentType: String,
+    },
+    expoPushToken: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

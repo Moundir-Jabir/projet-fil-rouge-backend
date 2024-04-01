@@ -25,6 +25,7 @@ const listingSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       ref: "Categorie",
     },
+    description: String,
     user: {
       type: mongoose.ObjectId,
       ref: "User",

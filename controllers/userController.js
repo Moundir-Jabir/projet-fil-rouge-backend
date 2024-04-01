@@ -20,3 +20,18 @@ exports.userImage = (req, res) => {
     return res.send(data);
   }
 };
+
+exports.setExpoPushToken = (req, res) => {
+  User.findByIdAndUpdate(
+    req.auth._id,
+    { expoPushToken: req.body.token },
+    { new: true }
+  )
+    .then((user) => {
+      user.hashed_password = undefined;
+      user.salt = undefined;
+      user.image = undefined;
+      res.send(user);
+    })
+    .catch((error) => res.status(400).json({ error }));
+};
