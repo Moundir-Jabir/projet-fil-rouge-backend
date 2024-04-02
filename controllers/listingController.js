@@ -15,7 +15,7 @@ exports.createListing = (req, res) => {
 
 exports.getAllListings = async (req, res) => {
   try {
-    const listings = await Listing.find().select("-images");
+    const listings = await Listing.find(req.query).select("-images");
     return res.json(listings);
   } catch (error) {
     return res.status(500).json({
