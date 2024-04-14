@@ -3,6 +3,7 @@ const Listing = require("../models/listing");
 exports.createListing = (req, res) => {
   req.body.user = req.auth._id;
   req.body.location = JSON.parse(req.body.location);
+  req.body.nbrimages = req.body.images.length;
   const newListing = new Listing(req.body);
   newListing
     .save()
@@ -25,7 +26,10 @@ exports.getAllListings = async (req, res) => {
 };
 
 exports.getListingById = (req, res) => {
-  return res.send(req.listing);
+  return res.send({
+    listing: req.listing,
+    numberOfListing: req.numberOfListing,
+  });
 };
 
 exports.listingById = (req, res, next, listingId) => {
@@ -37,8 +41,13 @@ exports.listingById = (req, res, next, listingId) => {
         return res.status(404).json({
           erreur: "Listing not found",
         });
-      req.listing = listing;
-      next();
+      Listing.find({ user: listing.user })
+        .countDocuments()
+        .then((count) => {
+          req.listing = listing;
+          req.numberOfListing = count;
+          next();
+        });
     })
     .catch((error) => res.status(400).json({ error }));
 };

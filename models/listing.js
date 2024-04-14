@@ -15,6 +15,7 @@ const listingSchema = new mongoose.Schema(
         contentType: String,
       },
     ],
+    nbrimages: Number,
     price: {
       type: Number,
       required: true,
